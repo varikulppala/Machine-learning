@@ -1,0 +1,78 @@
+#Hands On Machine Learning ( Logistic Regression )
+#Recall, Precision, F1 Score (Mean of recall and precision), Target, Features,
+
+#
+
+
+#Understanding Target and Feature
+Students, hours_studied, past_grades, passed_exam
+A ---       2    -----     60%-------NO
+B ---       5 ---------    70%-------Yes
+C ----      8 ---------    87%------ YES
+
+#The columns that you will consider taking as inputs for training your model are called Features ( Usually represented by X )
+#The column(s) that you are trying to predict, is/are called the Targets ( Target is represented by Y )
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+
+#Loading the dataset
+#Some data preprocessing
+#Train your model
+#Use your model to do some predictions
+#Evalaute the model
+#Visualize the results
+
+#Point 1. Loading the dataset
+from sklearn.datasets import load_breast_cancer
+data = load_breast_cancer()
+print(data)
+df = pd.DataFrame(data.data, columns=data.feature_names)
+
+df['target'] = data.target # Either 1 or 0
+
+X = df.drop(columns=['target'])
+
+
+
+
+#print(X)
+
+y = df['target'] #In this dataset we only have 1 column, 80 rows will correlate to training ones, and 20 for test.
+
+print(y)
+
+# You should never train your model on the entire dataset
+# we split our dataset into 2, one part will be used to train the model and the other would be used to test it after the model is trained.
+#Data Preprocessing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) #random_state sets how randomly the data is taken for the train and test split.
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+
+#  Training the MODEL
+model = LogisticRegression()
+model.fit(X_train, y_train) # Magic code: Shaka laka boom boom train hojao 😂
+
+#  Lets do some predictions
+
+y_predict = model.predict(X_test)
+
+print("Accuracy: ", accuracy_score(y_test, y_predict)) #How do you check accuracy? You know an acurate value(Test values) and then you compare the predicted values against them.
+print("Confusion Matrix: ", confusion_matrix(y_test, y_predict))
+print("Classification Report: ", classification_report(y_test, y_predict))
+
+sns.heatmap(confusion_matrix(y_test, y_predict), annot=True, cmap="Blues", fmt='d')
+plt.xlabel("Predicted values")
+plt.ylabel("Actual Values")
+plt.title("Confusion matrix")
+plt.show()
