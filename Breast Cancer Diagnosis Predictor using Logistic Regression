@@ -61,7 +61,7 @@ X_test = scaler.transform(X_test)
 
 #  Training the MODEL
 model = LogisticRegression()
-model.fit(X_train, y_train) # Magic code: Shaka laka boom boom train hojao 😂
+model.fit(X_train, y_train) 
 
 #  Lets do some predictions
 
